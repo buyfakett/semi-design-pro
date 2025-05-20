@@ -41,12 +41,11 @@ const alovaInstance = createAlova({
                 removeToken();
                 window.location.href = '/login';
             }
-
-            // 解析的响应数据将传给method实例的transform钩子函数，这些函数将在后续讲解
-            return json.data;
+            return json;
         },
         onError: (err, method) => {
             Toast.error(err.msg)
+            return err.json();
         },
     }
 });
