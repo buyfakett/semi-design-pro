@@ -1,27 +1,20 @@
-import { request } from '@umijs/max';
+import { request } from '@/src/utils/request';
 import { LoginParams, LoginResp, UserListParams, UserListResp, DeleteUserParams, DeleteUserResp } from './types';
-import requestAuth from '@/src/utils/request';
 
 
 /** 用户登录 */
 export async function Login(params: LoginParams) {
-  return request<LoginResp>('/api/user/login', {
-    method: 'POST',
-    data: params,
-  });
+  return request.Post<LoginResp>('/api/user/login', params);
 }
 
 /** 用户列表 */
 export async function List(params: UserListParams) {
-  return requestAuth<UserListResp>('/api/user/list', {
-    method: 'GET',
-    params: params,
+  return request.Get<UserListResp>('/api/user/list', {
+    params: params
   });
 }
 
 /** 用户列表 */
 export async function Delete(params: DeleteUserParams) {
-  return requestAuth<DeleteUserResp>(`/api/user/delete/${params.user_id}`, {
-    method: 'DELETE',
-  });
+  return request.Delete<DeleteUserResp>(`/api/user/delete/${params.user_id}`);
 }

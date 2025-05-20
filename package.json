@@ -13,6 +13,7 @@
     "@douyinfe/semi-icons-lab": "^2.80.0",
     "@douyinfe/semi-illustrations": "^2.55.5",
     "@douyinfe/semi-ui": "^2.80.0",
+    "alova": "^3.2.11",
     "autoprefixer": "^10.4.19",
     "axios": "^1.7.2",
     "echarts": "^5.5.0",
