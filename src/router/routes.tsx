@@ -69,7 +69,7 @@ export const MenuRoutes: IRouters[] = [
 const routers: RouteObject[] = [
   {
     path: '/',
-    element: <Wrapper component={<Layout />} />,
+    element: <Wrapper component={<Layout />} auth />,
     // 导航内的路由写在这里，同时要添加到Menu中
     children: [
       {
@@ -78,7 +78,7 @@ const routers: RouteObject[] = [
       },
       {
         path: 'setting',
-        element: <Wrapper component={<Setting />} auth />
+        element: <Wrapper component={<Setting />} />
       },
       {
         path: 'table/basic',

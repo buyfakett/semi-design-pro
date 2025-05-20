@@ -20,6 +20,7 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { MenuRoutes } from "@/src/router/routes";
 import { OnSelectedData } from "@douyinfe/semi-ui/lib/es/navigation";
 import { NotificationContent } from "./components/NotificationContent";
+import { removeToken } from "@/src/utils/auth";
 
 const { Header, Sider, Content } = MainLayout;
 
@@ -49,7 +50,7 @@ export default function Layout() {
   };
 
   const logout = () => {
-    window.localStorage.removeItem("isLogin");
+    removeToken();
     navigate("/user/login");
   };
 
