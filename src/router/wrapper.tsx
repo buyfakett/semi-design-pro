@@ -3,6 +3,7 @@
  */
 import React, { FC, Suspense } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
+import { getToken } from '../utils/auth';
 
 interface IProps {
   component: JSX.Element;
@@ -11,10 +12,10 @@ interface IProps {
 const Wrapper = (props: IProps): JSX.Element => {
   const { component, auth = false } = props;
   const { pathname } = useLocation();
-  const isLogin = window.localStorage.getItem('isLogin');
+  const token = getToken();
 
   // 登录校验
-  if (auth && !isLogin) {
+  if (auth && !token) {
     return <Navigate to='/userCenter/login' />
   }
   // 重定向

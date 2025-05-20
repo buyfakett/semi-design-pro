@@ -21,7 +21,8 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.6.1",
-    "specify-text": "^0.0.8"
+    "specify-text": "^0.0.8",
+    "zustand": "^5.0.4"
   },
   "devDependencies": {
     "@rsbuild/core": "^1.3.20",
