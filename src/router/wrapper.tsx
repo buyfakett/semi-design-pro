@@ -3,7 +3,7 @@
  */
 import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-import { getToken, isTokenExpired } from '@/src/utils/auth';
+import { getToken } from '@/src/utils/auth';
 
 interface IProps {
     component: JSX.Element;
