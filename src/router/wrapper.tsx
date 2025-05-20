@@ -3,7 +3,7 @@
  */
 import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-import { getToken } from '@/src/utils/auth';
+import { getToken, isTokenExpired } from '@/src/utils/auth';
 
 interface IProps {
     component: JSX.Element;
@@ -19,6 +19,7 @@ const Wrapper = ( props: IProps ): JSX.Element => {
     if (auth && token == null) {
         return <Navigate to='/user/login'/>
     }
+
     // 重定向
     if (pathname === '/' || pathname === 'dashboard' || pathname === 'user/login') {
         return <Navigate to='/home'/>

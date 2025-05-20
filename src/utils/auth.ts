@@ -28,30 +28,31 @@ export function removeToken(): void {
 interface JwtPayload {
     userid: string;
     username: string;
-    exp?: number;
-    expired?: boolean;
+    exp: number;
 }
 
 // 解jwt
-export function parseJwt(): JwtPayload | null {
+function parseJwt(): JwtPayload | null {
     try {
         const token = <string>getToken()
         const base64Url = token.split( '.' )[1];
         const base64 = base64Url.replace( /-/g, '+' ).replace( /_/g, '/' );
         const decodedPayload = JSON.parse( atob( base64 ) );
-
-        const currentTime = Math.floor( Date.now() / 1000 ); // 当前时间（单位是秒）
+        const userid = decodedPayload.userid;
+        const username = decodedPayload.username;
         const exp = decodedPayload.exp;
-        console.log( currentTime );
 
         return {
-            userid: decodedPayload.userid,
-            username: decodedPayload.username,
+            userid,
+            username,
             exp,
-            expired: typeof exp === 'number' ? exp < currentTime : false,
         };
     } catch (error) {
         console.error( 'Failed to parse JWT:', error );
-        return null;
+        return {
+            userid: '',
+            username: '',
+            exp: 0,
+        };
     }
 }
