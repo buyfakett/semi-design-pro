@@ -25,7 +25,7 @@ const LayoutWithTopNav = () => {
           mode='horizontal'
           header={{
             logo: <IconSemiLogo style={{ height: "36px", fontSize: 36 }} />,
-            text: "Semi 运营后台",
+            text: "Semi 后台",
           }}
         />
       </Header>

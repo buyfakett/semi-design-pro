@@ -50,7 +50,7 @@ export default function Layout() {
 
   const logout = () => {
     window.localStorage.removeItem("isLogin");
-    navigate("/userCenter/login");
+    navigate("/user/login");
   };
 
   const IconButtons = [
@@ -128,7 +128,7 @@ export default function Layout() {
           mode="horizontal"
           header={{
             logo: <IconSemiLogo style={{ height: "36px", fontSize: 36 }} />,
-            text: "Semi 运营后台",
+            text: "Semi 后台",
           }}
           footer={
             <>

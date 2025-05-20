@@ -19,7 +19,7 @@ const Wrapper = (props: IProps): JSX.Element => {
   }
   // 重定向
   if (pathname === '/' || pathname === 'dashboard') {
-    return <Navigate to='/dashboard/analysis' />
+    return <Navigate to='/table/basic' />
   } else {
     return component;
   }
