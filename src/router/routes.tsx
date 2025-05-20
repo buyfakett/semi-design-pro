@@ -14,6 +14,7 @@ const Setting = lazy(() => import('@/src/pages/setting'));
 const Login = lazy(() => import('@/src/pages/login'));
 
 const Table = lazy(() => import('@/src/pages/table'));
+const Home = lazy(() => import('@/src/pages/home'));
 
 const NotFond = lazy(() => import('@/src/pages/exception/404'));
 const NoAuth = lazy(() => import('@/src/pages/exception/403'));
@@ -26,6 +27,11 @@ export interface IRouters {
 }
 // 左侧导航路由
 export const MenuRoutes: IRouters[] = [
+  {
+    itemKey: '/home',
+    icon: <IconGridView1 />,
+    text: '首页',
+  },
   {
     itemKey: '/table',
     icon: <IconGridView1 />,
@@ -66,6 +72,10 @@ const routers: RouteObject[] = [
     element: <Wrapper component={<Layout />} />,
     // 导航内的路由写在这里，同时要添加到Menu中
     children: [
+      {
+        path: 'home',
+        element: <Wrapper component={<Home />} />
+      },
       {
         path: 'setting',
         element: <Wrapper component={<Setting />} auth />

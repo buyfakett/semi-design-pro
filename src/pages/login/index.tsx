@@ -1,8 +1,9 @@
 import React from 'react';
-import { Form, Button, Input, Toast, Typography } from '@douyinfe/semi-ui';
-import { IconUser, IconKey, IconFeishuLogo } from '@douyinfe/semi-icons';
+import { Form, Button, Toast, Typography } from '@douyinfe/semi-ui';
+import { IconUser, IconKey } from '@douyinfe/semi-icons';
 import { useNavigate } from 'react-router-dom';
 import { UserAPI } from '@/src/api/user';
+import { setToken } from '@/src/utils/auth';
 
 const { Text } = Typography;
 
@@ -23,7 +24,7 @@ const Login = () => {
       
       if (res.code === 200) {
         if (res.data?.token) {
-          localStorage.setItem('authToken', res.data.token);
+          setToken(res.data.token);
           Toast.success('登录成功');
           navigate('/home');
         } else {
