@@ -12,38 +12,38 @@ const {Header, Sider, Content} = MainLayout;
 export default function Layout() {
     const navigate = useNavigate();
     const {pathname} = useLocation();
-    const [isDark, setIsDark] = useState<boolean>( false );
-    const [pathKey, setPathKey] = useState<React.ReactText[]>( [] );
-    const [showBell, setShowBell] = useState<boolean>( false );
+    const [isDark, setIsDark] = useState<boolean>(false);
+    const [pathKey, setPathKey] = useState<React.ReactText[]>([]);
+    const [showBell, setShowBell] = useState<boolean>(false);
 
     const changeMode = () => {
-        setIsDark( !isDark );
+        setIsDark(!isDark);
         const body = document.body;
-        if (body.hasAttribute( "theme-mode" )) {
-            body.removeAttribute( "theme-mode" );
+        if (body.hasAttribute("theme-mode")) {
+            body.removeAttribute("theme-mode");
         } else {
-            body.setAttribute( "theme-mode", "dark" );
+            body.setAttribute("theme-mode", "dark");
         }
     };
 
     const goSetting = () => {
-        console.log( "Click Setting!" );
+        console.log("Click Setting!");
     };
 
     const showNotices = () => {
-        setShowBell( true );
+        setShowBell(true);
     };
 
     const logout = () => {
         removeToken();
-        navigate( "/user/login" );
+        navigate("/user/login");
     };
 
     const IconButtons = [
         {
             icon: (
                 <Popover
-                    onClickOutSide={() => setShowBell( false )}
+                    onClickOutSide={() => setShowBell(false)}
                     visible={showBell}
                     content={<NotificationContent/>}
                     trigger="custom"
@@ -72,7 +72,7 @@ export default function Layout() {
     const renderIcons = () => {
         return (
             <div className="flex gap-2 mr-4">
-                {IconButtons.map( ( item, index ) => {
+                {IconButtons.map((item, index) => {
                     return item?.tip ? (
                         <Tooltip content={item?.tip} key={index}>
                             <Button
@@ -91,21 +91,21 @@ export default function Layout() {
                             type="tertiary"
                         />
                     );
-                } )}
+                })}
             </div>
         );
     };
 
-    const onSelect = ( data: OnSelectedData ) => {
+    const onSelect = (data: OnSelectedData) => {
         // 设置浏览器title
         document.title = `${data.selectedItems[0].text}-Semi UI Pro`;
-        setPathKey( [...data.selectedKeys] );
-        navigate( data.itemKey as string );
+        setPathKey([...data.selectedKeys]);
+        navigate(data.itemKey as string);
     };
 
-    useEffect( () => {
-        setPathKey( [pathname] );
-    }, [pathname] );
+    useEffect(() => {
+        setPathKey([pathname]);
+    }, [pathname]);
     return (
         <MainLayout className="bg-(--semi-color-tertiary-light-default)">
             <Header>
@@ -137,12 +137,12 @@ export default function Layout() {
             <MainLayout>
                 <Sider>
                     <Nav
-                        defaultIsCollapsed
+                        defaultIsCollapsed={false}
                         mode="vertical"
                         style={{height: "100%", minHeight: "calc(100vh - 60px)"}}
                         selectedKeys={pathKey}
                         items={MenuRoutes}
-                        onSelect={( data ) => onSelect( data )}
+                        onSelect={(data) => onSelect(data)}
                         footer={{
                             collapseButton: true,
                         }}
