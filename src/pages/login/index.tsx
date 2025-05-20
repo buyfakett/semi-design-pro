@@ -42,8 +42,8 @@ const Login = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-[var(--semi-color-fill-0)]">
-      <div className="flex flex-col gap-6 p-8 bg-[var(--semi-color-white)] w-[480px] rounded-lg shadow-lg"
+    <div className="flex items-center justify-center min-h-screen bg-(--semi-color-fill-0)">
+      <div className="flex flex-col gap-6 p-8 bg-(--semi-color-white) w-[480px] rounded-lg shadow-lg"
            style={{ border: '1px solid var(--semi-color-border)' }}>
         <Text className="text-2xl font-bold">欢迎登录</Text>
 

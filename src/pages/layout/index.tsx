@@ -121,7 +121,7 @@ export default function Layout() {
     setPathKey([pathname]);
   }, [pathname]);
   return (
-    <MainLayout className="bg-[var(--semi-color-tertiary-light-default)]">
+    <MainLayout className="bg-(--semi-color-tertiary-light-default)">
       <Header>
         <Nav
           className="min-w-screen"

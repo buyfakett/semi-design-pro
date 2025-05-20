@@ -43,7 +43,7 @@ const VirtualList = (props: IProps) => {
         {/* 撑起列表内容 */}
         <div className='absolute top-0 left-0 right-0 z-[-1]' style={{ height: listHeight + 'px' }}></div>
         {/* 列表内容 */}
-        <div className='absolute top-0 left-0 right-0 z-[1]' style={{ transform: transFormStyle }}>
+        <div className='absolute top-0 left-0 right-0 z-1' style={{ transform: transFormStyle }}>
           {/* 列表项 */}
           {visibleData?.map((item) => (
             <div key={item}>

@@ -19,7 +19,7 @@ const LayoutWithTopNav = () => {
     }
   }
   return (
-    <Layout className='bg-[var(--semi-color-tertiary-light-default)] h-screen'>
+    <Layout className='bg-(--semi-color-tertiary-light-default) h-screen'>
       <Header>
         <Nav
           mode='horizontal'
