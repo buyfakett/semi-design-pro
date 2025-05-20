@@ -9,6 +9,11 @@ const { Text } = Typography;
 const Login = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = React.useState(false);
+  const username: string = process.env.NODE_ENV !== 'production' ? 'admin' : '';
+  const password: string =
+    process.env.NODE_ENV !== 'production' ? 'admin123456' : '';
+  const remember_me: boolean =
+    process.env.NODE_ENV !== 'production';
 
   // 使用Form组件管理表单状态
   const handleSubmit = async (values: any) => {
@@ -43,15 +48,16 @@ const Login = () => {
 
         <Form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <Form.Input
-            field="account"
+            field="username"
             label="账号"
             prefix={<IconUser />}
             showClear
-            placeholder="请输入用户名/邮箱"
+            placeholder="请输入用户名"
+            initValue={username}
             rules={[
               { required: true, message: '账号不能为空' },
               { pattern: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$|^[a-zA-Z0-9_]{4,20}$/, 
-                message: '请输入有效用户名或邮箱' }
+                message: '请输入有效用户名' }
             ]}
           />
 
@@ -62,6 +68,7 @@ const Login = () => {
             prefix={<IconKey />}
             showClear
             placeholder="请输入密码"
+            initValue={password}
             rules={[
               { required: true, message: '密码不能为空' },
               { min: 6, message: '密码至少6位字符' }
@@ -69,10 +76,7 @@ const Login = () => {
           />
 
           <div className="flex items-center justify-between">
-            <Form.Checkbox field="remember">记住我</Form.Checkbox>
-            <Button theme="borderless" type="tertiary" className="text-sm">
-              忘记密码？
-            </Button>
+            <Form.Checkbox initValue={remember_me} field="remember_me">记住我</Form.Checkbox>
           </div>
 
           <Button
@@ -84,25 +88,8 @@ const Login = () => {
           >
             登录
           </Button>
-
-          <Divider>或</Divider>
-
-          <Button
-            icon={<IconFeishuLogo />}
-            theme="borderless"
-            type="tertiary"
-            className="flex items-center justify-center gap-2"
-          >
-            使用飞书账号登录
-          </Button>
         </Form>
 
-        <div className="flex justify-center gap-2 text-sm">
-          <Text>没有账号？</Text>
-          <Button theme="borderless" type="primary" onClick={() => navigate('/register')}>
-            立即注册
-          </Button>
-        </div>
       </div>
     </div>
   );
