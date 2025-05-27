@@ -1,9 +1,9 @@
 import React, { FC, lazy, ReactElement, Suspense } from 'react';
 import { RouteObject, useRoutes } from 'react-router-dom';
 import { Spin } from '@douyinfe/semi-ui';
-import { IconConfig, IconNavigation } from '@douyinfe/semi-icons-lab';
+import { IconConfig } from '@douyinfe/semi-icons-lab';
 import Wrapper from './wrapper';
-import { IconAlertTriangle, IconArticle, IconEdit, IconGridView1, IconList } from '@douyinfe/semi-icons';
+import { IconAlertTriangle, IconGridView1 } from '@douyinfe/semi-icons';
 
 // 使用懒加载导入页面组件
 const Layout = lazy(() => import('@/src/pages/layout'));
