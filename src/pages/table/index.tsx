@@ -55,8 +55,12 @@ const TablePage = () => {
         },
         {
             title: "出版年份",
-            dataIndex: "publish_date",
-            render: (year: string) => year
+            dataIndex: "year",
+            render: (text: number, record: { cover: string }) => (
+                <div className="flex items-center">
+                    <span className="font-medium">{text}</span>
+                </div>
+            ),
         },
         {
             title: "操作",
