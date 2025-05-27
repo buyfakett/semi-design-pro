@@ -1,20 +1,62 @@
 import React, { useRef, useState } from "react";
-import { Table, Avatar, Button, Modal, Form } from "@douyinfe/semi-ui";
+import { Table, Button, Modal, Form } from "@douyinfe/semi-ui";
 import useService from "@/src/hooks/useService";
 import { ColumnProps } from "@douyinfe/semi-ui/lib/es/table";
 import { FormApi } from "@douyinfe/semi-ui/lib/es/form";
 import { BookService } from "@/src/services/book";
+import { IconRefresh } from "@douyinfe/semi-icons";
 
-const {Input, Select} = Form
+const {Input, DatePicker} = Form
 
 const TablePage = () => {
     const [pageNum, setPage] = useState(1);
-    const [{data, loading}] = useService(() => BookService.list({page: pageNum, page_size: 10}), [pageNum]);
-    const [{data: userList, loading: userLoading}] = useService(() => BookService.list({page: 1, page_size: 10}), []);
+    const [{data, loading}, refresh] = useService(() => BookService.list({page: pageNum, page_size: 10}), [pageNum]);
     const [visible, setVisible] = useState(false);
+    const [modalType, setModalType] = useState<'create' | 'edit'>('create');
     const [modalRecord, setModalRecord] = useState<any>();
     const [okLoading, setOkLoading] = useState(false)
     const formApi = useRef<FormApi>();
+
+    const handleDelete = async (id: string) => {
+        Modal.confirm({
+            title: '确认删除',
+            content: '确定要删除这条记录吗？',
+            onOk: async () => {
+                await BookService.delete({book_id: id});
+                refresh();
+            }
+        });
+    };
+
+    const handleSubmit = async () => {
+        if (!formApi.current) return;
+        const values = await formApi.current.validate();
+        values.year = values.year.getFullYear();
+        setOkLoading(true);
+        try {
+            if (modalType === 'create') {
+                await BookService.add(values);
+            } else {
+                await BookService.update(modalRecord.book_id, values);
+            }
+            refresh();
+            setVisible(false);
+        } finally {
+            setOkLoading(false);
+        }
+    };
+
+    const openCreateModal = () => {
+        setModalType('create');
+        setModalRecord(undefined);
+        setVisible(true);
+    };
+
+    const editInfo = (record: any) => {
+        setModalType('edit');
+        setModalRecord(record);
+        setVisible(true);
+    };
 
     const columns: ColumnProps[] = [
         {
@@ -70,36 +112,31 @@ const TablePage = () => {
                 return (
                     <div className="flex items-center justify-center gap-2">
                         <Button type="primary" theme='solid' onClick={() => editInfo(record)}>编辑</Button>
-                        <Button type="danger" theme='solid'>删除</Button>
+                        <Button type="danger" theme='solid' onClick={() => handleDelete(record.book_id)}>删除</Button>
                     </div>
                 );
             },
         },
     ];
 
-    const editInfo = (record: any) => {
-        setModalRecord(record)
-        setVisible(true)
-    }
-
-    const handleOk = () => {
-        if (!formApi.current) return;
-        formApi.current.validate().then((values: any) => {
-            setOkLoading(true)
-            setTimeout(() => {
-                //TODO: save data
-                setVisible(false)
-                setOkLoading(false)
-            }, 1000)
-        })
-    }
+    const getDefaultYear = (year?: number | string): Date => {
+        console.log(year);
+        if (year) {
+            // 处理数字或字符串格式的年份
+            const yearNum = typeof year === 'string' ? parseInt(year) : year;
+            console.log(new Date(yearNum, 0, 1))
+            return new Date(yearNum, 0, 1); // 返回 Date 对象
+        }
+        return new Date(); // 默认当前日期
+    };
 
     return (
         <div>
             <div className="flex flex-col gap-4 p-4">
                 <div className="flex justify-between items-center p-4 rounded-lg shadow-sm">
-                    <Input field='username'></Input>
-                    <Button type="primary" theme="solid">新增</Button>
+                    <Input field='search' placeholder='搜索...'></Input>
+                    <Button type="primary" theme="solid" onClick={openCreateModal}>新增</Button>
+                    <Button icon={<IconRefresh />} type="primary" theme="solid" onClick={refresh}>刷新</Button>
                 </div>
                 <div className="rounded-lg shadow-sm p-4">
                     <Table
@@ -118,11 +155,13 @@ const TablePage = () => {
                 </div>
             </div>
             <Modal
-                title='编辑信息'
+                title={
+                    modalType === 'create' ? '新增书籍' : '编辑书籍信息'
+                }
                 size="large"
                 visible={visible}
                 onCancel={() => setVisible(false)}
-                onOk={handleOk}
+                onOk={handleSubmit}
                 okButtonProps={{loading: okLoading}}
             >
                 <Form
@@ -133,43 +172,32 @@ const TablePage = () => {
                     getFormApi={api => formApi.current = api}
                 >
                     <Input
-                        field='name'
-                        label='标题'
-                        className='min-w-[100px]'
-                        rules={[{required: true, message: '请输入标题'}]}
+                        field='title'
+                        label='书名'
+                        rules={[{required: true, message: '请输入书名'}]}
                     />
-                    <Select field='platform' label='平台' className='min-w-[100px]'>
-                        <Select.Option value='DOUYIN'>抖音</Select.Option>
-                        <Select.Option value='XIAOHONGSHU'>小红书</Select.Option>
-                        <Select.Option value='WEIBO'>微博</Select.Option>
-                    </Select>
-                    <Select field='status' label='交付状态' className='min-w-[100px]'>
-                        <Select.Option value='success'>已交付</Select.Option>
-                        <Select.Option value='wait'>待评审</Select.Option>
-                        <Select.Option value='pending'>已延期</Select.Option>
-                    </Select>
-                    <Select field='owner' label='负责人' className='min-w-[100px]'
-                            renderSelectedItem={renderSelectedItem}>
-                        {userList?.data?.map(item => (
-                            <Select.Option {...item} key={item.id} value={item.id} className="flex items-center pr-8">
-                                <Avatar size="extra-small" src={item.avatar}/>
-                                <div className="ml-4">{item.name}</div>
-                            </Select.Option>
-                        ))}
-                    </Select>
+                    <Input
+                        field='author'
+                        label='作者'
+                        rules={[{required: true, message: '请输入作者'}]}
+                    />
+                    <Input
+                        field='summary'
+                        label='概述'
+                        rules={[{required: true, message: '请输入概述'}]}
+                    />
+                    <DatePicker
+                        field='year'
+                        label='出版年份'
+                        format='yyyy'
+                        defaultValue={modalRecord?.year}
+                        rules={[{ required: true, message: '请选择年份' }]}
+                        insetInput
+                    />
                 </Form>
             </Modal>
         </div>
     );
 };
 
-const renderSelectedItem = (option: any) => {
-    console.log(option)
-    return (
-        <div className="flex items-center gap-2">
-            <Avatar size="extra-small" src={option.avatar}/>
-            {option.name}
-        </div>
-    )
-}
 export default TablePage;
