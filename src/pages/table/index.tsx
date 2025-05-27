@@ -1,23 +1,15 @@
 import React, { useRef, useState } from "react";
-import { Table, Avatar, Tag, Button, Modal, Form } from "@douyinfe/semi-ui";
+import { Table, Avatar, Button, Modal, Form } from "@douyinfe/semi-ui";
 import useService from "@/src/hooks/useService";
-import { getTableData } from "@/src/services/table";
-import { Platform, PlatformType, StatusType } from "@/src/enums/status";
-import {
-    IconTickCircle,
-    IconClear,
-    IconComment,
-} from "@douyinfe/semi-icons";
 import { ColumnProps } from "@douyinfe/semi-ui/lib/es/table";
 import { FormApi } from "@douyinfe/semi-ui/lib/es/form";
-import { getUserList } from "@/src/services/user";
 import { BookService } from "@/src/services/book";
 
 const {Input, Select} = Form
 
 const TablePage = () => {
     const [pageNum, setPage] = useState(1);
-    const [{data, loading}] = useService(() => getTableData({page: pageNum, pageSize: 10}), [pageNum]);
+    const [{data, loading}] = useService(() => BookService.list({page: pageNum, page_size: 10}), [pageNum]);
     const [{data: userList, loading: userLoading}] = useService(() => BookService.list({page: 1, page_size: 10}), []);
     const [visible, setVisible] = useState(false);
     const [modalRecord, setModalRecord] = useState<any>();
@@ -26,96 +18,45 @@ const TablePage = () => {
 
     const columns: ColumnProps[] = [
         {
-            title: "标题",
-            dataIndex: "name",
-            render: (
-                text: string,
-                record: { nameIconSrc: string | undefined },
-                index: any
-            ) => {
-                return (
-                    <div>
-                        <Avatar
-                            size="small"
-                            shape="square"
-                            src={record.nameIconSrc}
-                            style={{marginRight: 12}}
-                        ></Avatar>
-                        {text}
-                    </div>
-                );
-            },
+            title: "id",
+            dataIndex: "book_id",
+            render: (id: string, record: { cover: string }) => (
+                <div className="flex items-center">
+                    <span className="font-medium">{id}</span>
+                </div>
+            ),
         },
         {
-            title: "平台",
-            dataIndex: "platform",
-            render: (text: PlatformType) => {
-                return <Tag color="red">{Platform[text]}</Tag>;
-            },
+            title: "书名",
+            dataIndex: "title",
+            render: (text: string, record: { cover: string }) => (
+                <div className="flex items-center">
+                    <span className="font-medium">{text}</span>
+                </div>
+            ),
         },
         {
-            title: "交付状态",
-            dataIndex: "status",
-            render: (text: StatusType) => {
-                const tagConfig = {
-                    success: {
-                        color: "green" as any,
-                        prefixIcon: <IconTickCircle/>,
-                        text: "已交付",
-                    },
-                    pending: {
-                        color: "pink" as any,
-                        prefixIcon: <IconClear/>,
-                        text: "已延期",
-                    },
-                    wait: {
-                        color: "cyan" as any,
-                        prefixIcon: <IconComment/>,
-                        text: "待评审",
-                    },
-                };
-                const tagProps = tagConfig[text];
-                return (
-                    <Tag shape="circle" {...tagProps} style={{userSelect: "text"}}>
-                        {tagProps.text}
-                    </Tag>
-                );
-            },
+            title: "作者",
+            dataIndex: "author",
+            render: (text: string, record: { cover: string }) => (
+                <div className="flex items-center">
+                    <span className="font-medium">{text}</span>
+                </div>
+            ),
         },
         {
-            title: "负责人",
-            dataIndex: "owner",
-            align: "left",
-            render: (text: number) => {
-                const user = userList?.data?.find(item => item.id === text);
-                if (!user) {
-                    return (
-                        <div>
-                            <Avatar
-                                size="small"
-                                style={{marginRight: 4}}
-                            >
-                                U
-                            </Avatar>
-                            未知用户
-                        </div>
-                    );
-                }
-                return (
-                    <div>
-                        <Avatar
-                            size="small"
-                            style={{marginRight: 4}}
-                            src={user.avatar}
-                        />
-                        {user.name}
-                    </div>
-                );
-            },
+            title: "概述",
+            dataIndex: "summary",
+            render: (text: string, record: { cover: string }) => (
+                <div className="flex items-center">
+                    <span className="font-medium">{text}</span>
+                </div>
+            ),
         },
         {
-            title: "更新日期",
-            dataIndex: "updateTime",
+            title: "出版年份",
+            dataIndex: "publish_date",
+            render: (year: string) => year
         },
         {
             title: "操作",
