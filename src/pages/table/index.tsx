@@ -97,11 +97,11 @@ const TablePage = () => {
     return (
         <div>
             <div className="flex flex-col gap-4 p-4">
-                <div className="flex justify-between items-center bg-white p-4 rounded-lg shadow-sm">
+                <div className="flex justify-between items-center p-4 rounded-lg shadow-sm">
                     <Input field='username'></Input>
                     <Button type="primary" theme="solid">新增</Button>
                 </div>
-                <div className="bg-white rounded-lg shadow-sm p-4">
+                <div className="rounded-lg shadow-sm p-4">
                     <Table
                         loading={loading}
                         columns={columns}
