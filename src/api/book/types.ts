@@ -1,3 +1,5 @@
+import { CommonResp } from "@/src/api/common.type";
+
 export interface AddBookParams {
   title: string;
   author: string;
@@ -5,19 +7,13 @@ export interface AddBookParams {
   summary?: string;
 }
 
-export interface AddBookResp {
-  code: number;
-  msg: string;
-}
+export interface AddBookResp extends CommonResp {}
 
 export interface DeleteBookParams {
   book_id: string;
 }
 
-export interface DeleteBookResp {
-  code: number;
-  msg: string;
-}
+export interface DeleteBookResp extends CommonResp {}
 
 export interface ListBooksParams {
   page?: number;
@@ -33,11 +29,9 @@ export interface BookItem {
   summary: string;
 }
 
-export interface ListBooksResp {
-  code: number;
-  msg: string;
-  total: number;
-  data: BookItem[];
+export interface ListBooksResp extends CommonResp {
+  total?: number;
+  data?: BookItem[];
 }
 
 export interface UpdateBookParams {
@@ -48,7 +42,4 @@ export interface UpdateBookParams {
   summary: string;
 }
 
-export interface UpdateBookResp {
-  code: number;
-  msg: string;
-}
+export interface UpdateBookResp extends CommonResp {}

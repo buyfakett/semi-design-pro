@@ -1,7 +1,4 @@
-export interface CommonResp {
-  code: number;
-  msg: string;
-}
+import { CommonResp } from "@/src/api/common.type";
 
 export interface LoginParams {
   username: string;
