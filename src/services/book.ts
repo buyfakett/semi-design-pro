@@ -40,9 +40,9 @@ export const BookService = {
     },
 
     /** 更新书籍 */
-    update: async (params: UpdateBookParams) => {
+    update: async (book_id: number, params: UpdateBookParams) => {
         try {
-            const resp = await BookAPI.Update(params);
+            const resp = await BookAPI.Update(book_id, params);
             if (resp.code === 200) {
                 Toast.success('更新成功');
                 return true;

@@ -28,6 +28,6 @@ export async function List(params: ListBooksParams) {
 }
 
 /** 更新书籍 */
-export async function Update(params: UpdateBookParams) {
-  return request.Post<UpdateBookResp>(`/api/book/update/${params.book_id}`, params);
+export async function Update(book_id: number, params: UpdateBookParams) {
+  return request.Post<UpdateBookResp>(`/api/book/update/${book_id}`, params);
 }

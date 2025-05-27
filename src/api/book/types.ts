@@ -1,9 +1,9 @@
 import { CommonResp } from "@/src/api/common.type";
 
 export interface AddBookParams {
-  title: string;
-  author: string;
-  year: number;
+  title?: string;
+  author?: string;
+  year?: number;
   summary?: string;
 }
 
@@ -35,11 +35,10 @@ export interface ListBooksResp extends CommonResp {
 }
 
 export interface UpdateBookParams {
-  book_id: string;
-  title: string;
-  author: string;
-  year: number;
-  summary: string;
+  title?: string;
+  author?: string;
+  year?: number;
+  summary?: string;
 }
 
 export interface UpdateBookResp extends CommonResp {}
