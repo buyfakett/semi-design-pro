@@ -11,13 +11,14 @@ import {
 import { ColumnProps } from "@douyinfe/semi-ui/lib/es/table";
 import { FormApi } from "@douyinfe/semi-ui/lib/es/form";
 import { getUserList } from "@/src/services/user";
+import { BookService } from "@/src/services/book";
 
 const {Input, Select} = Form
 
 const TablePage = () => {
     const [pageNum, setPage] = useState(1);
     const [{data, loading}] = useService(() => getTableData({page: pageNum, pageSize: 10}), [pageNum]);
-    const [{data: userList, loading: userLoading}] = useService(() => getUserList({page: 1, pageSize: 100}), []);
+    const [{data: userList, loading: userLoading}] = useService(() => BookService.list({page: 1, page_size: 10}), []);
     const [visible, setVisible] = useState(false);
     const [modalRecord, setModalRecord] = useState<any>();
     const [okLoading, setOkLoading] = useState(false)

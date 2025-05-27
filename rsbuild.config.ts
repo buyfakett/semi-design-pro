@@ -3,6 +3,17 @@ import { pluginReact } from '@rsbuild/plugin-react';
 import { pluginSass } from '@rsbuild/plugin-sass';
 import path from 'path';
 
+let ENV_url: string;
+
+try {
+  const {ENV_url: importedUrl} = require('./url.config');
+  ENV_url = importedUrl;
+} catch (error) {
+  // 如果导入文件失败，将 ENV_url 设置为空字符串
+  console.error('没有url.config.js文件:', error);
+  ENV_url = '';
+}
+
 export default defineConfig({
   source: {
     entry: {
@@ -13,6 +24,14 @@ export default defineConfig({
     }
   },
   plugins: [pluginReact(), pluginSass()],
+  server: {
+    proxy: {
+      '/api': {
+        target: ENV_url,
+        changeOrigin: true,
+      }
+    }
+  },
   output: {
     distPath: {
       root: 'dist',
