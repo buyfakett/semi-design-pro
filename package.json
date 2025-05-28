@@ -15,6 +15,7 @@
     "@douyinfe/semi-ui": "^2.80.0",
     "alova": "^3.2.11",
     "axios": "^1.7.2",
+    "dayjs": "^1.11.13",
     "echarts": "^5.5.0",
     "echarts-for-react": "^3.0.2",
     "postcss": "^8.4.38",

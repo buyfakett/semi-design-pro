@@ -5,6 +5,7 @@ import { ColumnProps } from "@douyinfe/semi-ui/lib/es/table";
 import { FormApi } from "@douyinfe/semi-ui/lib/es/form";
 import { BookService } from "@/src/services/book";
 import { IconRefresh } from "@douyinfe/semi-icons";
+import dayjs from "dayjs";
 
 const {Input, DatePicker} = Form
 
@@ -31,7 +32,7 @@ const TablePage = () => {
     const handleSubmit = async () => {
         if (!formApi.current) return;
         const values = await formApi.current.validate();
-        values.year = values.year.getFullYear();
+        values.year = dayjs(values.year).format('YYYY-MM')
         setOkLoading(true);
         try {
             if (modalType === 'create') {
@@ -119,24 +120,13 @@ const TablePage = () => {
         },
     ];
 
-    const getDefaultYear = (year?: number | string): Date => {
-        console.log(year);
-        if (year) {
-            // 处理数字或字符串格式的年份
-            const yearNum = typeof year === 'string' ? parseInt(year) : year;
-            console.log(new Date(yearNum, 0, 1))
-            return new Date(yearNum, 0, 1); // 返回 Date 对象
-        }
-        return new Date(); // 默认当前日期
-    };
-
     return (
         <div>
             <div className="flex flex-col gap-4 p-4">
                 <div className="flex justify-between items-center p-4 rounded-lg shadow-sm">
                     <Input field='search' placeholder='搜索...'></Input>
                     <Button type="primary" theme="solid" onClick={openCreateModal}>新增</Button>
-                    <Button icon={<IconRefresh />} type="primary" theme="solid" onClick={refresh}>刷新</Button>
+                    <Button icon={<IconRefresh/>} type="primary" theme="solid" onClick={refresh}>刷新</Button>
                 </div>
                 <div className="rounded-lg shadow-sm p-4">
                     <Table
@@ -189,9 +179,8 @@ const TablePage = () => {
                     <DatePicker
                         field='year'
                         label='出版年份'
-                        format='yyyy'
-                        defaultValue={modalRecord?.year}
-                        rules={[{ required: true, message: '请选择年份' }]}
+                        type='month'
+                        rules={[{required: true, message: '请选择年份'}]}
                         insetInput
                     />
                 </Form>
