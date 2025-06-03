@@ -26,10 +26,6 @@ export default function Layout() {
         }
     };
 
-    const goSetting = () => {
-        console.log("Click Setting!");
-    };
-
     const logout = () => {
         removeToken();
         navigate("/user/login");
@@ -40,11 +36,6 @@ export default function Layout() {
             icon: <IconMoon size="extra-large"/>,
             event: () => changeMode(),
             tip: `切换到${isDark ? "亮色" : "暗色"}模式`,
-        },
-        {
-            icon: <IconSetting size="extra-large"/>,
-            event: () => goSetting(),
-            tip: "设置",
         },
     ];
 

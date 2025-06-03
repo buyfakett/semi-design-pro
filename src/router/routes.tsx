@@ -9,8 +9,6 @@ import { IconAlertTriangle, IconFile, IconHome } from '@douyinfe/semi-icons';
 const Layout = lazy(() => import('@/src/pages/layout'));
 const LayoutWithTopNav = lazy(() => import('@/src/pages/layout/layoutWithTopNav'));
 
-const Setting = lazy(() => import('@/src/pages/setting'));
-
 const Login = lazy(() => import('@/src/pages/login'));
 
 const Table = lazy(() => import('@/src/pages/table'));
@@ -52,11 +50,6 @@ export const MenuRoutes: IRouters[] = [
       }
     ]
   },
-  {
-    itemKey: '/setting',
-    icon: <IconConfig />,
-    text: '设置'
-  }
 ];
 
 // 浏览器路由
@@ -69,10 +62,6 @@ const routers: RouteObject[] = [
       {
         path: 'home',
         element: <Wrapper component={<Home />} />
-      },
-      {
-        path: 'setting',
-        element: <Wrapper component={<Setting />} />
       },
       {
         path: 'table/basic',

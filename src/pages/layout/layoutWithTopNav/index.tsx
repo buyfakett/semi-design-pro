@@ -3,8 +3,13 @@ import { IconSemiLogo } from '@douyinfe/semi-icons';
 import { Outlet } from 'react-router-dom';
 import { APP_NAME } from "@/src/config";
 import Footer from "@/src/pages/layout/Footer";
+import { useEffect } from "react";
 
 const LayoutWithTopNav = () => {
+    useEffect(() => {
+        document.title = `${APP_NAME} 管理后台`;
+    }, []);
+
     return (
         <Layout className='bg-(--semi-color-tertiary-light-default) h-screen'>
             <Layout.Header>
