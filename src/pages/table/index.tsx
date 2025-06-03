@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { Table, Button, Modal, Form } from "@douyinfe/semi-ui";
+import { Table, Button, Modal, Form, Input, DatePicker } from "@douyinfe/semi-ui";
 import useService from "@/src/hooks/useService";
 import { ColumnProps } from "@douyinfe/semi-ui/lib/es/table";
 import { FormApi } from "@douyinfe/semi-ui/lib/es/form";
@@ -7,11 +7,17 @@ import { BookService } from "@/src/services/book";
 import { IconRefresh } from "@douyinfe/semi-icons";
 import dayjs from "dayjs";
 
-const {Input, DatePicker} = Form
-
 const TablePage = () => {
     const [pageNum, setPage] = useState(1);
-    const [{data, loading}, refresh] = useService(() => BookService.list({page: pageNum, page_size: 10}), [pageNum]);
+    const [queryParams, setQueryParams] = useState<{ title?: string; author?: string }>({});
+    const [titleInput, setTitleInput] = useState('');
+    const [authorInput, setAuthorInput] = useState('');
+    const serviceResponse = useService(() => BookService.list({
+        page: pageNum,
+        page_size: 10, ...queryParams
+    }), [pageNum, queryParams]);
+    const {data, loading} = serviceResponse[0];
+    const refresh = serviceResponse[1];
     const [visible, setVisible] = useState(false);
     const [modalType, setModalType] = useState<'create' | 'edit'>('create');
     const [modalRecord, setModalRecord] = useState<any>();
@@ -124,9 +130,34 @@ const TablePage = () => {
         <div>
             <div className="flex flex-col gap-4 p-4">
                 <div className="flex justify-between items-center p-4 rounded-lg shadow-sm">
-                    <Input field='search' placeholder='搜索...'></Input>
-                    <Button type="primary" theme="solid" onClick={openCreateModal}>新增</Button>
-                    <Button icon={<IconRefresh/>} type="primary" theme="solid" onClick={refresh}>刷新</Button>
+                    <div className="flex gap-2">
+                        <Input
+                            value={titleInput}
+                            onChange={value => setTitleInput(value)}
+                            placeholder='书名'
+                        ></Input>
+                        <Input
+                            value={authorInput}
+                            onChange={value => setAuthorInput(value)}
+                            placeholder='作者'
+                        ></Input>
+                        <Button type="primary" theme="solid" onClick={() => {
+                            setQueryParams({
+                                title: titleInput || undefined,
+                                author: authorInput || undefined
+                            });
+                            setPage(1);
+                        }}>查询</Button>
+                        <Button icon={<IconRefresh/>} type="primary" theme="solid" onClick={() => {
+                            setQueryParams({});
+                            setTitleInput('');
+                            setAuthorInput('');
+                            setPage(1);
+                        }}>重置</Button>
+                    </div>
+                    <div className="flex gap-2">
+                        <Button type="primary" theme="solid" onClick={openCreateModal}>新增</Button>
+                    </div>
                 </div>
                 <div className="rounded-lg shadow-sm p-4">
                     <Table
@@ -161,22 +192,22 @@ const TablePage = () => {
                     initValues={modalRecord}
                     getFormApi={api => formApi.current = api}
                 >
-                    <Input
+                    <Form.Input
                         field='title'
                         label='书名'
                         rules={[{required: true, message: '请输入书名'}]}
                     />
-                    <Input
+                    <Form.Input
                         field='author'
                         label='作者'
                         rules={[{required: true, message: '请输入作者'}]}
                     />
-                    <Input
+                    <Form.Input
                         field='summary'
                         label='概述'
                         rules={[{required: true, message: '请输入概述'}]}
                     />
-                    <DatePicker
+                    <Form.DatePicker
                         field='year'
                         label='出版年份'
                         type='month'
