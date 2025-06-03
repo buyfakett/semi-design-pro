@@ -4,12 +4,13 @@ import { IconKey, IconUser } from '@douyinfe/semi-icons';
 import { useNavigate } from 'react-router-dom';
 import { UserAPI } from '@/src/api/user';
 import { setToken } from '@/src/utils/auth';
+import { APP_NAME } from "@/src/config";
 
 const {Text} = Typography;
 
 const Login = () => {
     const navigate = useNavigate();
-    const [loading, setLoading] = React.useState( false );
+    const [loading, setLoading] = React.useState(false);
     const username: string = process.env.NODE_ENV !== 'production' ? 'admin' : '';
     const password: string =
         process.env.NODE_ENV !== 'production' ? 'admin123456' : '';
@@ -17,27 +18,27 @@ const Login = () => {
         process.env.NODE_ENV !== 'production';
 
     // 使用Form组件管理表单状态
-    const handleSubmit = async ( values: any ) => {
+    const handleSubmit = async (values: any) => {
         try {
-            setLoading( true );
-            const res = await UserAPI.Login( values );
+            setLoading(true);
+            const res = await UserAPI.Login(values);
 
             if (res.code === 200) {
                 if (res.data?.token) {
-                    setToken( res.data.token );
-                    Toast.success( '登录成功' );
-                    navigate( '/home' );
+                    setToken(res.data.token);
+                    Toast.success('登录成功');
+                    navigate('/home');
                 } else {
-                    Toast.error( '登录凭证缺失' );
+                    Toast.error('登录凭证缺失');
                 }
             } else {
-                Toast.error( res.msg || `登录失败，错误码：${res.code}` );
+                Toast.error(res.msg || `登录失败，错误码：${res.code}`);
             }
         } catch (error) {
-            Toast.error( '登录失败，请重试' );
-            console.error( 'Login error:', error );
+            Toast.error('登录失败，请重试');
+            console.error('Login error:', error);
         } finally {
-            setLoading( false );
+            setLoading(false);
         }
     };
 
@@ -45,7 +46,7 @@ const Login = () => {
         <div className='flex flex-col gap-8 p-8 rounded-lg bg-[var(--semi-color-white)] w-[600px] h-[500px]'
              style={{border: '1px solid var(--semi-color-border)'}}>
             <div className="flex flex-col items-center mb-6">
-                <Text className="text-3xl font-bold text-[--semi-color-primary]">欢迎登录</Text>
+                <Text className="text-3xl font-bold text-[--semi-color-primary]">欢迎登录 {APP_NAME}</Text>
                 <Text className="text-sm text-[--semi-color-text-2] mt-2">请输入您的账号和密码</Text>
             </div>
 

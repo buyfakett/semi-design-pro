@@ -1,11 +1,12 @@
 import React, { Suspense, useEffect, useState } from "react";
-import { Button, Dropdown, Layout as MainLayout, Nav, Popover, Spin, Tooltip, } from "@douyinfe/semi-ui";
-import { IconBell, IconMoon, IconSemiLogo, IconSetting, } from "@douyinfe/semi-icons";
+import { Button, Dropdown, Layout as MainLayout, Nav, Spin, Tooltip } from "@douyinfe/semi-ui";
+import { IconMoon, IconSemiLogo, IconSetting, } from "@douyinfe/semi-icons";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { MenuRoutes } from "@/src/router/routes";
 import { OnSelectedData } from "@douyinfe/semi-ui/lib/es/navigation";
-import { NotificationContent } from "./components/NotificationContent";
 import { getUsername, removeToken } from "@/src/utils/auth";
+import { APP_NAME } from "@/src/config";
+import Footer from "@/src/pages/layout/Footer";
 
 const {Header, Sider, Content} = MainLayout;
 
@@ -13,8 +14,7 @@ export default function Layout() {
     const navigate = useNavigate();
     const {pathname} = useLocation();
     const [isDark, setIsDark] = useState<boolean>(false);
-    const [pathKey, setPathKey] = useState<React.ReactText[]>([]);
-    const [showBell, setShowBell] = useState<boolean>(false);
+    const [pathKey, setPathKey] = useState<string[]>([]);
 
     const changeMode = () => {
         setIsDark(!isDark);
@@ -30,32 +30,12 @@ export default function Layout() {
         console.log("Click Setting!");
     };
 
-    const showNotices = () => {
-        setShowBell(true);
-    };
-
     const logout = () => {
         removeToken();
         navigate("/user/login");
     };
 
     const IconButtons = [
-        {
-            icon: (
-                <Popover
-                    onClickOutSide={() => setShowBell(false)}
-                    visible={showBell}
-                    content={<NotificationContent/>}
-                    trigger="custom"
-                    clickToHide={false}
-                    className="w-[500px] h-80 overflow-auto"
-                >
-                    <IconBell size="extra-large"/>
-                </Popover>
-            ),
-            event: () => showNotices(),
-            // tip: '消息通知'
-        },
         {
             icon: <IconMoon size="extra-large"/>,
             event: () => changeMode(),
@@ -99,22 +79,26 @@ export default function Layout() {
     const onSelect = (data: OnSelectedData) => {
         // 设置浏览器title
         document.title = `${data.selectedItems[0].text}-Semi UI Pro`;
-        setPathKey([...data.selectedKeys]);
+        setPathKey(data.selectedKeys.map(String));
         navigate(data.itemKey as string);
     };
 
     useEffect(() => {
         setPathKey([pathname]);
     }, [pathname]);
+
     return (
-        <MainLayout className="bg-(--semi-color-tertiary-light-default)">
+        <MainLayout
+            className="bg-(--semi-color-tertiary-light-default)"
+            style={{height: '100vh', display: 'flex', flexDirection: 'column'}}
+        >
             <Header>
                 <Nav
                     className="min-w-screen"
                     mode="horizontal"
                     header={{
                         logo: <IconSemiLogo style={{height: "36px", fontSize: 36}}/>,
-                        text: "Semi 后台",
+                        text: `${APP_NAME} 管理后台`,
                     }}
                     footer={
                         <>
@@ -134,32 +118,43 @@ export default function Layout() {
                     }
                 />
             </Header>
-            <MainLayout>
-                <Sider>
-                    <Nav
-                        defaultIsCollapsed={false}
-                        mode="vertical"
-                        style={{height: "100%", minHeight: "calc(100vh - 60px)"}}
-                        selectedKeys={pathKey}
-                        items={MenuRoutes}
-                        onSelect={(data) => onSelect(data)}
-                        footer={{
-                            collapseButton: true,
+            <MainLayout style={{flex: 1, overflow: 'hidden'}}>
+                <div className="flex flex-1" style={{minHeight: '0'}}>
+                    <Sider
+                        style={{
+                            height: '100%',
+                            overflow: 'auto',
+                            position: 'sticky',
+                            top: 60,
+                            zIndex: 10
                         }}
-                    />
-                </Sider>
-                <Content className="overflow-auto" style={{height: 'calc(100vh - 60px)'}}>
-                    <Suspense
-                        fallback={
-                            <div className="flex items-center justify-center w-screen h-screen">
-                                <Spin/>
-                            </div>
-                        }
                     >
-                        <Outlet/>
-                    </Suspense>
-                </Content>
+                        <Nav
+                            defaultIsCollapsed={false}
+                            mode="vertical"
+                            style={{height: '100%', minHeight: 'calc(100vh - 120px)'}}
+                            selectedKeys={pathKey}
+                            items={MenuRoutes}
+                            onSelect={(data) => onSelect(data)}
+                            footer={{
+                                collapseButton: true,
+                            }}
+                        />
+                    </Sider>
+                    <Content className="overflow-auto">
+                        <Suspense
+                            fallback={
+                                <div className="flex items-center justify-center w-screen h-screen">
+                                    <Spin/>
+                                </div>
+                            }
+                        >
+                            <Outlet/>
+                        </Suspense>
+                    </Content>
+                </div>
             </MainLayout>
+            <Footer/>
         </MainLayout>
     );
 }
