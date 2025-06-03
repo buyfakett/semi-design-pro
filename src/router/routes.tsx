@@ -3,7 +3,7 @@ import { RouteObject, useRoutes } from 'react-router-dom';
 import { Spin } from '@douyinfe/semi-ui';
 import { IconConfig } from '@douyinfe/semi-icons-lab';
 import Wrapper from './wrapper';
-import { IconAlertTriangle, IconGridView1 } from '@douyinfe/semi-icons';
+import { IconAlertTriangle, IconFile, IconHome } from '@douyinfe/semi-icons';
 
 // 使用懒加载导入页面组件
 const Layout = lazy(() => import('@/src/pages/layout'));
@@ -29,19 +29,13 @@ export interface IRouters {
 export const MenuRoutes: IRouters[] = [
   {
     itemKey: '/home',
-    icon: <IconGridView1 />,
+    icon: <IconHome />,
     text: '首页',
   },
   {
-    itemKey: '/table',
-    icon: <IconGridView1 />,
-    text: '表格页',
-    items: [
-      {
-        itemKey: '/table/basic',
-        text: '基础表格'
-      }
-    ]
+    itemKey: '/table/basic',
+    icon: <IconFile />,
+    text: '图书管理',
   },
   {
     itemKey: '/exception',
