@@ -31,7 +31,7 @@ const alovaInstance = createAlova({
             if (response.status === 200) {
                 console.log(json)
                 if (json.code !== 200) {
-                    Toast.success(json.msg)
+                    Toast.error(json.msg)
                 }
             }
             return json;

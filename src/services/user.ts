@@ -13,12 +13,9 @@ export const UserService = {
                 if (res.data?.token) {
                     setToken(res.data.token);
                     Toast.success('登录成功');
-
                 } else {
                     Toast.error('登录凭证缺失');
                 }
-            } else {
-                Toast.error(res.msg || `登录失败，错误码：${res.code}`);
             }
         } catch (error) {
             Toast.error('登录失败，请重试');
