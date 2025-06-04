@@ -1,6 +1,6 @@
 import React, { Suspense, useEffect, useRef, useState } from "react";
-import { Button, Dropdown, Layout as MainLayout, Nav, Spin, Tooltip } from "@douyinfe/semi-ui";
-import { IconMoon, IconSemiLogo } from "@douyinfe/semi-icons";
+import { Dropdown, Layout as MainLayout, Nav, Spin } from "@douyinfe/semi-ui";
+import { IconSemiLogo } from "@douyinfe/semi-icons";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { MenuRoutes } from "@/src/router/routes";
 import { OnSelectedData } from "@douyinfe/semi-ui/lib/es/navigation";
@@ -8,13 +8,13 @@ import { getUsername, removeToken } from "@/src/utils/auth";
 import { APP_NAME } from "@/src/config";
 import Footer from "@/src/pages/layout/Footer";
 import ChangePasswordModal from "@/src/components/ChangePasswordModal";
+import SwitchThemeButton from "@/src/components/SwitchThemeButton";
 
 const {Header, Sider, Content} = MainLayout;
 
 export default function Layout() {
     const navigate = useNavigate();
     const {pathname} = useLocation();
-    const [isDark, setIsDark] = useState<boolean>(false);
     const [pathKey, setPathKey] = useState<string[]>([]);
     const changePasswordRef = useRef<{ open: () => void }>(null);
 
@@ -23,55 +23,9 @@ export default function Layout() {
         changePasswordRef.current?.open();
     };
 
-    const changeMode = () => {
-        setIsDark(!isDark);
-        const body = document.body;
-        if (body.hasAttribute("theme-mode")) {
-            body.removeAttribute("theme-mode");
-        } else {
-            body.setAttribute("theme-mode", "dark");
-        }
-    };
-
     const logout = () => {
         removeToken();
         navigate("/user/login");
-    };
-
-    const IconButtons = [
-        {
-            icon: <IconMoon size="extra-large"/>,
-            event: () => changeMode(),
-            tip: `切换到${isDark ? "亮色" : "暗色"}模式`,
-        },
-    ];
-
-    // 顶部导航右侧icon按钮
-    const renderIcons = () => {
-        return (
-            <div className="flex gap-2 mr-4">
-                {IconButtons.map((item, index) => {
-                    return item?.tip ? (
-                        <Tooltip content={item?.tip} key={index}>
-                            <Button
-                                theme="borderless"
-                                icon={item.icon}
-                                onClick={item.event}
-                                type="tertiary"
-                            />
-                        </Tooltip>
-                    ) : (
-                        <Button
-                            key={index}
-                            theme="borderless"
-                            icon={item.icon}
-                            onClick={item.event}
-                            type="tertiary"
-                        />
-                    );
-                })}
-            </div>
-        );
     };
 
     const onSelect = (data: OnSelectedData) => {
@@ -100,7 +54,7 @@ export default function Layout() {
                             text: `${APP_NAME} 管理后台`,
                         }}
                         footer={<>
-                            {renderIcons()}
+                            <SwitchThemeButton/>
                             <Dropdown
                                 position="bottomRight"
                                 render={<Dropdown.Menu>

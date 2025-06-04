@@ -3,7 +3,8 @@ import { IconSemiLogo } from '@douyinfe/semi-icons';
 import { Outlet } from 'react-router-dom';
 import { APP_NAME } from "@/src/config";
 import Footer from "@/src/pages/layout/Footer";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
+import SwitchThemeButton from "@/src/components/SwitchThemeButton";
 
 const LayoutWithTopNav = () => {
     useEffect(() => {
@@ -19,6 +20,7 @@ const LayoutWithTopNav = () => {
                         logo: <IconSemiLogo style={{height: "36px", fontSize: 36}}/>,
                         text: `${APP_NAME} 管理后台`,
                     }}
+                    footer={<SwitchThemeButton/>}
                 />
             </Layout.Header>
             <Layout.Content className='flex items-center justify-center w-screen mt-24'>
