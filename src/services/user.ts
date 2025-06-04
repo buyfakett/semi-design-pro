@@ -1,10 +1,35 @@
 import { UserAPI } from '@/src/api/user';
 import { Toast } from '@douyinfe/semi-ui';
 import { setToken } from "@/src/utils/auth";
-import { ChangePasswdParams, LoginParams } from "@/src/api/user/types";
+import {
+    AddUserParams,
+    ChangePasswdParams,
+    DeleteUserParams,
+    LoginParams,
+    UpdateUserParams,
+    UserListParams
+} from "@/src/api/user/types";
 
 /** 用户 */
 export const UserService = {
+    /** 获取用户列表 */
+    list: async (params: UserListParams) => {
+        try {
+            const resp = await UserAPI.List(params);
+            if (resp.code === 200) {
+                return {
+                    data: resp.data,
+                    total: resp.total,
+                    page: params.page || 1
+                };
+            }
+            Toast.error(resp.msg || '获取列表失败');
+            return {data: [], total: 0};
+        } catch (err) {
+            Toast.error('网络请求异常');
+            return {data: [], total: 0};
+        }
+    },
     /** 登录 */
     login: async (params: LoginParams) => {
         try {
@@ -23,6 +48,39 @@ export const UserService = {
         }
     },
 
+    /** 新增用户 */
+    add: async (params: AddUserParams) => {
+        try {
+            const resp = await UserAPI.Add(params);
+            if (resp.code === 200) {
+                Toast.success('添加成功');
+                return true;
+            }
+            Toast.error(resp.msg || '添加失败');
+            return false;
+        } catch (err) {
+            Toast.error('网络请求异常');
+            return false;
+        }
+    },
+
+    /** 更新用户 */
+    update: async (book_id: number, params: UpdateUserParams) => {
+        try {
+            const resp = await UserAPI.Update(book_id, params);
+            if (resp.code === 200) {
+                Toast.success('更新成功');
+                return true;
+            }
+            Toast.error(resp.msg || '更新失败');
+            return false;
+        } catch (err) {
+            Toast.error('网络请求异常');
+            return false;
+        }
+    },
+
+    /** 修改密码 */
     updatePassword: async (userId: string, params: ChangePasswdParams) => {
         try {
             const resp = await UserAPI.ChangePasswd(userId, params);
@@ -37,4 +95,20 @@ export const UserService = {
             return false;
         }
     },
+
+    /** 删除用户 */
+    delete: async (params: DeleteUserParams) => {
+        try {
+            const resp = await UserAPI.Delete(params);
+            if (resp.code === 200) {
+                Toast.success('删除成功');
+                return true;
+            }
+            Toast.error(resp.msg || '删除失败');
+            return false;
+        } catch (err) {
+            Toast.error('网络请求异常');
+            return false;
+        }
+    }
 };

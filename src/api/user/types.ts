@@ -6,6 +6,17 @@ export interface LoginParams {
   remember_me?: boolean;
 }
 
+export interface AddUserParams {
+  username: string;
+  password: string;
+  email?: string;
+}
+
+export interface UpdateUserParams {
+  username?: string;
+  email?: string;
+}
+
 export interface LoginResp extends CommonResp {
   data?: {
     token: string;
@@ -31,7 +42,7 @@ export interface UserListResp extends CommonResp {
 }
 
 export interface DeleteUserParams {
-  user_id: number;
+  user_id: string;
 }
 
 export interface ChangePasswdParams {
@@ -41,3 +52,7 @@ export interface ChangePasswdParams {
 export interface DeleteUserResp extends CommonResp {}
 
 export interface ChangePasswdResp extends CommonResp {}
+
+export interface AddUserResp extends CommonResp {}
+
+export interface UpdateUserResp extends CommonResp {}

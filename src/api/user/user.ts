@@ -7,13 +7,22 @@ import {
     DeleteUserParams,
     DeleteUserResp,
     ChangePasswdResp,
-    ChangePasswdParams
+    ChangePasswdParams,
+    AddUserParams,
+    AddUserResp,
+    UpdateUserResp,
+    UpdateUserParams
 } from './types';
 
 
 /** 用户登录 */
 export async function Login(params: LoginParams) {
     return request.Post<LoginResp>('/api/user/login', params);
+}
+
+/** 添加用户 */
+export async function Add(params: AddUserParams) {
+    return request.Put<AddUserResp>('/api/user/add', params);
 }
 
 /** 用户列表 */
@@ -23,7 +32,7 @@ export async function List(params: UserListParams) {
     });
 }
 
-/** 用户列表 */
+/** 删除用户 */
 export async function Delete(params: DeleteUserParams) {
     return request.Delete<DeleteUserResp>(`/api/user/delete/${params.user_id}`);
 }
@@ -31,4 +40,9 @@ export async function Delete(params: DeleteUserParams) {
 /** 改密码 */
 export async function ChangePasswd(user_id: string, params: ChangePasswdParams) {
     return request.Post<ChangePasswdResp>(`/api/user/change_passwd/${user_id}`, params);
+}
+
+/** 更新用户 */
+export async function Update(user_id: number, params: UpdateUserParams) {
+    return request.Post<UpdateUserResp>(`/api/book/update/${user_id}`, params);
 }

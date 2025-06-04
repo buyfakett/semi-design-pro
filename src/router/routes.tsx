@@ -2,13 +2,14 @@ import React, { FC, lazy, ReactElement, Suspense } from 'react';
 import { RouteObject, useRoutes } from 'react-router-dom';
 import { Spin } from '@douyinfe/semi-ui';
 import Wrapper from './wrapper';
-import { IconAlertTriangle, IconFile, IconHome } from '@douyinfe/semi-icons';
+import { IconAlertTriangle, IconFile, IconHome, IconUser } from '@douyinfe/semi-icons';
 
 // 使用懒加载导入页面组件
 const Layout = lazy(() => import('@/src/pages/layout'));
 const LayoutWithTopNav = lazy(() => import('@/src/pages/layout/layoutWithTopNav'));
 
 const Login = lazy(() => import('@/src/pages/login'));
+const UserList = lazy(() => import('@/src/pages/user'));
 
 const Book = lazy(() => import('@/src/pages/book'));
 const Home = lazy(() => import('@/src/pages/home'));
@@ -33,6 +34,11 @@ export const MenuRoutes: IRouters[] = [
     itemKey: '/book',
     icon: <IconFile />,
     text: '图书管理',
+  },
+  {
+    itemKey: '/user/list',
+    icon: <IconUser />,
+    text: '用户管理',
   },
   {
     itemKey: '/exception',
@@ -65,6 +71,10 @@ const routers: RouteObject[] = [
       {
         path: 'book',
         element: <Wrapper component={<Book />} />
+      },
+      {
+        path: 'user/list',
+        element: <Wrapper component={<UserList />} />
       },
     ]
   },
