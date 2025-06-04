@@ -34,4 +34,10 @@ export interface DeleteUserParams {
   user_id: number;
 }
 
+export interface ChangePasswdParams {
+  password: string;
+}
+
 export interface DeleteUserResp extends CommonResp {}
+
+export interface ChangePasswdResp extends CommonResp {}
