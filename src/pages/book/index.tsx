@@ -7,7 +7,7 @@ import { BookService } from "@/src/services/book";
 import { IconRefresh } from "@douyinfe/semi-icons";
 import dayjs from "dayjs";
 
-const TablePage = () => {
+const BookPage = () => {
     const [pageNum, setPage] = useState(1);
     const [queryParams, setQueryParams] = useState<{ title?: string; author?: string }>({});
     const [titleInput, setTitleInput] = useState('');
@@ -220,4 +220,4 @@ const TablePage = () => {
     );
 };
 
-export default TablePage;
+export default BookPage;

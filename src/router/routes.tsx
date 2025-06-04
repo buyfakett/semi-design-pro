@@ -1,7 +1,6 @@
 import React, { FC, lazy, ReactElement, Suspense } from 'react';
 import { RouteObject, useRoutes } from 'react-router-dom';
 import { Spin } from '@douyinfe/semi-ui';
-import { IconConfig } from '@douyinfe/semi-icons-lab';
 import Wrapper from './wrapper';
 import { IconAlertTriangle, IconFile, IconHome } from '@douyinfe/semi-icons';
 
@@ -11,7 +10,7 @@ const LayoutWithTopNav = lazy(() => import('@/src/pages/layout/layoutWithTopNav'
 
 const Login = lazy(() => import('@/src/pages/login'));
 
-const Table = lazy(() => import('@/src/pages/table'));
+const Book = lazy(() => import('@/src/pages/book'));
 const Home = lazy(() => import('@/src/pages/home'));
 
 const NotFond = lazy(() => import('@/src/pages/exception/404'));
@@ -31,7 +30,7 @@ export const MenuRoutes: IRouters[] = [
     text: '首页',
   },
   {
-    itemKey: '/table/basic',
+    itemKey: '/book',
     icon: <IconFile />,
     text: '图书管理',
   },
@@ -64,8 +63,8 @@ const routers: RouteObject[] = [
         element: <Wrapper component={<Home />} />
       },
       {
-        path: 'table/basic',
-        element: <Wrapper component={<Table />} />
+        path: 'book',
+        element: <Wrapper component={<Book />} />
       },
     ]
   },
