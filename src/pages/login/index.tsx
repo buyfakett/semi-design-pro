@@ -1,10 +1,9 @@
 import React from 'react';
-import { Button, Form, Toast, Typography } from '@douyinfe/semi-ui';
+import { Button, Form, Typography } from '@douyinfe/semi-ui';
 import { IconKey, IconUser } from '@douyinfe/semi-icons';
-import { useNavigate } from 'react-router-dom';
-import { UserAPI } from '@/src/api/user';
-import { setToken } from '@/src/utils/auth';
 import { APP_NAME } from "@/src/config";
+import { UserService } from "@/src/services/user";
+import { useNavigate } from "react-router-dom";
 
 const {Text} = Typography;
 
@@ -19,27 +18,9 @@ const Login = () => {
 
     // 使用Form组件管理表单状态
     const handleSubmit = async (values: any) => {
-        try {
-            setLoading(true);
-            const res = await UserAPI.Login(values);
-
-            if (res.code === 200) {
-                if (res.data?.token) {
-                    setToken(res.data.token);
-                    Toast.success('登录成功');
-                    navigate('/home');
-                } else {
-                    Toast.error('登录凭证缺失');
-                }
-            } else {
-                Toast.error(res.msg || `登录失败，错误码：${res.code}`);
-            }
-        } catch (error) {
-            Toast.error('登录失败，请重试');
-            console.error('Login error:', error);
-        } finally {
-            setLoading(false);
-        }
+        setLoading(true);
+        await UserService.login(values);
+        navigate('/home');
     };
 
     return (
