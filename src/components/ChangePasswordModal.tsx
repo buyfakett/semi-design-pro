@@ -1,8 +1,12 @@
-import React, { forwardRef, useImperativeHandle, useState } from "react";
+import React, { forwardRef, useImperativeHandle, useRef, useState } from "react";
 import { Modal, Form } from "@douyinfe/semi-ui";
+import { FormApi } from "@douyinfe/semi-ui/lib/es/form";
+import { UserService } from "@/src/services/user";
+import { IconKey } from "@douyinfe/semi-icons";
+import { ChangePasswdParams } from "@/src/api/user/types";
 
 export interface ChangePasswordModalRef {
-    open: () => void;
+    open: (userId: string) => void;
 }
 
 interface ChangePasswordModalProps {
@@ -13,18 +17,22 @@ const ChangePasswordModal = forwardRef<ChangePasswordModalRef, ChangePasswordMod
     ({onSuccess}, ref) => {
         const [visible, setVisible] = useState(false);
         const [okLoading, setOkLoading] = useState(false);
+        const userIdRef = useRef<string>('');
+        const formApi = useRef<FormApi>();
 
         useImperativeHandle(ref, () => ({
-            open: () => {
+            open: (userId: string) => {
+                userIdRef.current = userId;
                 setVisible(true);
             },
         }));
 
         const handleSubmit = async () => {
+            if (!formApi.current) return;
+            const values = await formApi.current.validate();
             setOkLoading(true);
             try {
-                // 模拟异步操作
-                await new Promise(resolve => setTimeout(resolve, 1000));
+                await UserService.updatePassword(userIdRef.current, values as ChangePasswdParams);
                 setVisible(false);
                 onSuccess?.(); // 回调成功逻辑
             } finally {
@@ -45,11 +53,18 @@ const ChangePasswordModal = forwardRef<ChangePasswordModalRef, ChangePasswordMod
                     labelPosition="left"
                     labelAlign="left"
                     labelWidth={100}
+                    getFormApi={api => formApi.current = api}
                 >
                     <Form.Input
                         field="password"
                         label="新密码"
-                        rules={[{required: true, message: "请输入密码"}]}
+                        mode="password"
+                        prefix={<IconKey/>}
+                        showClear
+                        rules={[
+                            {required: true, message: '密码不能为空'},
+                            {min: 6, message: '密码至少6位字符'}
+                        ]}
                     />
                 </Form>
             </Modal>

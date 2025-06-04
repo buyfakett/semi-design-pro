@@ -4,7 +4,7 @@ import { IconSemiLogo } from "@douyinfe/semi-icons";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { MenuRoutes } from "@/src/router/routes";
 import { OnSelectedData } from "@douyinfe/semi-ui/lib/es/navigation";
-import { getUsername, removeToken } from "@/src/utils/auth";
+import { getUserid, getUsername, removeToken } from "@/src/utils/auth";
 import { APP_NAME } from "@/src/config";
 import Footer from "@/src/pages/layout/Footer";
 import ChangePasswordModal from "@/src/components/ChangePasswordModal";
@@ -16,11 +16,12 @@ export default function Layout() {
     const navigate = useNavigate();
     const {pathname} = useLocation();
     const [pathKey, setPathKey] = useState<string[]>([]);
-    const changePasswordRef = useRef<{ open: () => void }>(null);
+    const changePasswordRef = useRef<{ open: (userId: string) => void }>(null);
 
     // 显示弹窗
     const changePasswd = () => {
-        changePasswordRef.current?.open();
+        const userId = getUserid()
+        changePasswordRef.current?.open(userId);
     };
 
     const logout = () => {

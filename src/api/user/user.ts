@@ -29,6 +29,6 @@ export async function Delete(params: DeleteUserParams) {
 }
 
 /** 改密码 */
-export async function ChangePasswd(user_id: number, params: ChangePasswdParams) {
+export async function ChangePasswd(user_id: string, params: ChangePasswdParams) {
     return request.Post<ChangePasswdResp>(`/api/user/change_passwd/${user_id}`, params);
 }

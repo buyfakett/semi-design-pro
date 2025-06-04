@@ -1,8 +1,8 @@
 import { authStore } from "@/src/stores/useAuthStore";
 
 // 设置 token
-export function setToken( token: string ): void {
-    authStore.setState( {token} );
+export function setToken(token: string): void {
+    authStore.setState({token});
 }
 
 // 获取 token 
@@ -11,18 +11,18 @@ export function getToken(): string | null {
 }
 
 // 获取 username
-export function getUsername(): string | null {
+export function getUsername(): string {
     return parseJwt()?.username ?? '';
 }
 
 // 获取 getUserid
-export function getUserid(): string | null {
+export function getUserid(): string {
     return parseJwt()?.userid ?? '';
 }
 
 // 删除 token
 export function removeToken(): void {
-    authStore.setState( {token: null} );
+    authStore.setState({token: null});
 }
 
 interface JwtPayload {
@@ -32,12 +32,12 @@ interface JwtPayload {
 }
 
 // 解jwt
-function parseJwt(): JwtPayload | null {
+function parseJwt(): JwtPayload {
     try {
         const token = <string>getToken()
-        const base64Url = token.split( '.' )[1];
-        const base64 = base64Url.replace( /-/g, '+' ).replace( /_/g, '/' );
-        const decodedPayload = JSON.parse( atob( base64 ) );
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const decodedPayload = JSON.parse(atob(base64));
         const userid = decodedPayload.userid;
         const username = decodedPayload.username;
         const exp = decodedPayload.exp;
@@ -48,7 +48,7 @@ function parseJwt(): JwtPayload | null {
             exp,
         };
     } catch (error) {
-        console.error( 'Failed to parse JWT:', error );
+        console.error('Failed to parse JWT:', error);
         return {
             userid: '',
             username: '',
