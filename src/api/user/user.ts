@@ -44,5 +44,5 @@ export async function ChangePasswd(user_id: string, params: ChangePasswdParams) 
 
 /** 更新用户 */
 export async function Update(user_id: number, params: UpdateUserParams) {
-    return request.Post<UpdateUserResp>(`/api/book/update/${user_id}`, params);
+    return request.Post<UpdateUserResp>(`/api/user/update/${user_id}`, params);
 }

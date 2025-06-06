@@ -10,7 +10,7 @@ import { AddUserParams } from "@/src/api/user/types";
 
 const UserPage = () => {
     const [pageNum, setPage] = useState(1);
-    const [queryParams, setQueryParams] = useState<{ title?: string; author?: string }>({});
+    const [queryParams, setQueryParams] = useState<{ username?: string; email?: string }>({});
     const [usernameInput, setUsernameInput] = useState('');
     const [emailInput, setEmailInput] = useState('');
     const serviceResponse = useService(() => UserService.list({
@@ -136,8 +136,8 @@ const UserPage = () => {
                         ></Input>
                         <Button type="primary" theme="solid" onClick={() => {
                             setQueryParams({
-                                title: usernameInput || undefined,
-                                author: emailInput || undefined
+                                username: usernameInput || undefined,
+                                email: emailInput || undefined
                             });
                             setPage(1);
                         }}>查询</Button>
