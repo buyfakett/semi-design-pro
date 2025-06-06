@@ -4,12 +4,11 @@ import useService from "@/src/hooks/useService";
 import { ColumnProps } from "@douyinfe/semi-ui/lib/es/table";
 import { FormApi } from "@douyinfe/semi-ui/lib/es/form";
 import { IconRefresh } from "@douyinfe/semi-icons";
-import dayjs from "dayjs";
 import { UserService } from "@/src/services/user";
 import ChangePasswordModal from "@/src/components/ChangePasswordModal";
 import { AddUserParams } from "@/src/api/user/types";
 
-const BookPage = () => {
+const UserPage = () => {
     const [pageNum, setPage] = useState(1);
     const [queryParams, setQueryParams] = useState<{ title?: string; author?: string }>({});
     const [usernameInput, setUsernameInput] = useState('');
@@ -46,7 +45,6 @@ const BookPage = () => {
     const handleSubmit = async () => {
         if (!formApi.current) return;
         const values = await formApi.current.validate();
-        values.year = dayjs(values.year).format('YYYY-MM')
         setOkLoading(true);
         try {
             if (modalType === 'create') {
@@ -77,6 +75,7 @@ const BookPage = () => {
         {
             title: "id",
             dataIndex: "user_id",
+            width: '10%',
             render: (id: string, record: { cover: string }) => (
                 <div className="flex items-center">
                     <span className="font-medium">{id}</span>
@@ -86,6 +85,7 @@ const BookPage = () => {
         {
             title: "用户名",
             dataIndex: "username",
+            width: '30%',
             render: (text: string, record: { cover: string }) => (
                 <div className="flex items-center">
                     <span className="font-medium">{text}</span>
@@ -95,6 +95,7 @@ const BookPage = () => {
         {
             title: "邮箱",
             dataIndex: "email",
+            width: '30%',
             render: (text: string, record: { cover: string }) => (
                 <div className="flex items-center">
                     <span className="font-medium">{text}</span>
@@ -109,7 +110,8 @@ const BookPage = () => {
                 return (
                     <div className="flex items-center justify-center gap-2">
                         <Button type="primary" theme='solid' onClick={() => editInfo(record)}>编辑</Button>
-                        <Button type="primary" theme='solid' onClick={() => changePasswd(record.user_id)}>修改密码</Button>
+                        <Button type="primary" theme='solid'
+                                onClick={() => changePasswd(record.user_id)}>修改密码</Button>
                         <Button type="danger" theme='solid' onClick={() => handleDelete(record.user_id)}>删除</Button>
                     </div>
                 );
@@ -168,7 +170,7 @@ const BookPage = () => {
             </div>
             <Modal
                 title={
-                    modalType === 'create' ? '新增书籍' : '编辑书籍信息'
+                    modalType === 'create' ? '新增用户' : '编辑用户信息'
                 }
                 size="large"
                 visible={visible}
@@ -191,7 +193,6 @@ const BookPage = () => {
                     <Form.Input
                         field='email'
                         label='邮箱'
-                        rules={[{required: true, message: '请输入邮箱'}]}
                     />
                 </Form>
             </Modal>
@@ -200,4 +201,4 @@ const BookPage = () => {
     );
 };
 
-export default BookPage;
+export default UserPage;
