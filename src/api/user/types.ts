@@ -56,3 +56,11 @@ export interface ChangePasswdResp extends CommonResp {}
 export interface AddUserResp extends CommonResp {}
 
 export interface UpdateUserResp extends CommonResp {}
+
+export interface UserInfoResp extends CommonResp {
+  data?: {
+    user_id: string;
+    username: string;
+    email?: string;
+  }
+}

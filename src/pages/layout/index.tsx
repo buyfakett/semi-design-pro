@@ -1,5 +1,5 @@
 import React, { Suspense, useEffect, useRef, useState } from "react";
-import { Dropdown, Layout as MainLayout, Nav, Spin } from "@douyinfe/semi-ui";
+import { Dropdown, Form, Layout as MainLayout, Modal, Nav, Spin } from "@douyinfe/semi-ui";
 import { IconSemiLogo } from "@douyinfe/semi-icons";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { MenuRoutes } from "@/src/router/routes";
@@ -9,6 +9,8 @@ import { APP_NAME } from "@/src/config";
 import Footer from "@/src/pages/layout/Footer";
 import ChangePasswordModal from "@/src/components/ChangePasswordModal";
 import SwitchThemeButton from "@/src/components/SwitchThemeButton";
+import { UserService } from "@/src/services/user";
+import { FormApi } from "@douyinfe/semi-ui/lib/es/form";
 
 const {Header, Sider, Content} = MainLayout;
 
@@ -17,6 +19,10 @@ export default function Layout() {
     const {pathname} = useLocation();
     const [pathKey, setPathKey] = useState<string[]>([]);
     const changePasswordRef = useRef<{ open: (userId: string) => void }>(null);
+    const [visible, setVisible] = useState(false);
+    const formApi = useRef<FormApi>();
+    const [okLoading, setOkLoading] = useState(false);
+    const [modalRecord, setModalRecord] = useState<any>();
 
     // 显示弹窗
     const changePasswd = () => {
@@ -40,6 +46,30 @@ export default function Layout() {
         setPathKey([pathname]);
     }, [pathname]);
 
+    const changeInfo = async () => {
+        setOkLoading(true);
+        try {
+            const userData = await UserService.info(getUserid());
+            setModalRecord(userData);
+            setVisible(false);
+        } finally {
+            setOkLoading(false);
+        }
+        setVisible(true);
+    }
+
+    const handleSubmit = async () => {
+        if (!formApi.current) return;
+        const values = await formApi.current.validate();
+        setOkLoading(true);
+        try {
+            await UserService.update(values.user_id, values);
+            setVisible(false);
+        } finally {
+            setOkLoading(false);
+        }
+    };
+
     return (
         <>
             <MainLayout
@@ -60,6 +90,7 @@ export default function Layout() {
                                 position="bottomRight"
                                 render={<Dropdown.Menu>
                                     <Dropdown.Item onClick={changePasswd}>修改密码</Dropdown.Item>
+                                    <Dropdown.Item onClick={changeInfo}>修改信息</Dropdown.Item>
                                     <Dropdown.Item onClick={logout}>退出</Dropdown.Item>
                                 </Dropdown.Menu>}
                             >
@@ -102,6 +133,32 @@ export default function Layout() {
                 </MainLayout>
                 <Footer/>
             </MainLayout>
+            <Modal
+                title='编辑用户信息'
+                size="large"
+                visible={visible}
+                onCancel={() => setVisible(false)}
+                onOk={handleSubmit}
+                okButtonProps={{loading: okLoading}}
+            >
+                <Form
+                    labelPosition='left'
+                    labelAlign='left'
+                    labelWidth={100}
+                    initValues={modalRecord}
+                    getFormApi={api => formApi.current = api}
+                >
+                    <Form.Input
+                        field='username'
+                        label='用户名'
+                        rules={[{required: true, message: '请输入用户名'}]}
+                    />
+                    <Form.Input
+                        field='email'
+                        label='邮箱'
+                    />
+                </Form>
+            </Modal>
             <ChangePasswordModal ref={changePasswordRef}/>
         </>
     );

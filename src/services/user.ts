@@ -110,5 +110,21 @@ export const UserService = {
             Toast.error('网络请求异常');
             return false;
         }
+    },
+
+    /** 用户信息 */
+    info: async (user_id: string) => {
+        try {
+            const resp = await UserAPI.Info(user_id);
+            if (resp.code === 200) {
+                Toast.success('获取成功');
+                return resp.data;
+            }
+            Toast.error(resp.msg || '获取失败');
+            return "";
+        } catch (err) {
+            Toast.error('网络请求异常');
+            return "";
+        }
     }
 };
