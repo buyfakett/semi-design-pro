@@ -117,10 +117,9 @@ export const UserService = {
         try {
             const resp = await UserAPI.Info(user_id);
             if (resp.code === 200) {
-                Toast.success('获取成功');
                 return resp.data;
             }
-            Toast.error(resp.msg || '获取失败');
+            Toast.error(resp.msg || '获取用户信息失败');
             return "";
         } catch (err) {
             Toast.error('网络请求异常');
