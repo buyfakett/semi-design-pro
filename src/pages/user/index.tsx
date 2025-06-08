@@ -157,6 +157,7 @@ const UserPage = () => {
                         loading={loading}
                         columns={columns}
                         dataSource={data?.data}
+                        bordered
                         pagination={{
                             total: data?.total,
                             currentPage: pageNum,
