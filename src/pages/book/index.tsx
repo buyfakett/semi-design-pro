@@ -14,7 +14,7 @@ const BookPage = () => {
     const [authorInput, setAuthorInput] = useState('');
     const serviceResponse = useService(() => BookService.list({
         page: pageNum,
-        page_size: 10, ...queryParams
+        page_size: 8, ...queryParams
     }), [pageNum, queryParams]);
     const {data, loading} = serviceResponse[0];
     const refresh = serviceResponse[1];
@@ -153,7 +153,7 @@ const BookPage = () => {
                             setTitleInput('');
                             setAuthorInput('');
                             setPage(1);
-                        }}>重置</Button>
+                        }}>清空刷新</Button>
                     </div>
                     <div className="flex gap-2">
                         <Button type="primary" theme="solid" onClick={openCreateModal}>新增</Button>
