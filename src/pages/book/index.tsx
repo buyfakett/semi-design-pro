@@ -8,13 +8,14 @@ import { IconRefresh } from "@douyinfe/semi-icons";
 import dayjs from "dayjs";
 
 const BookPage = () => {
+    const pageSize: number = 8;
     const [pageNum, setPage] = useState(1);
     const [queryParams, setQueryParams] = useState<{ title?: string; author?: string }>({});
     const [titleInput, setTitleInput] = useState('');
     const [authorInput, setAuthorInput] = useState('');
     const serviceResponse = useService(() => BookService.list({
         page: pageNum,
-        page_size: 8, ...queryParams
+        page_size: pageSize, ...queryParams
     }), [pageNum, queryParams]);
     const {data, loading} = serviceResponse[0];
     const refresh = serviceResponse[1];
@@ -166,6 +167,7 @@ const BookPage = () => {
                         dataSource={data?.data}
                         bordered
                         pagination={{
+                            pageSize,
                             total: data?.total,
                             currentPage: pageNum,
                             className: 'px-4 mt-4',

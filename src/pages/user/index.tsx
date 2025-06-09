@@ -9,13 +9,14 @@ import ChangePasswordModal from "@/src/components/ChangePasswordModal";
 import { AddUserParams } from "@/src/api/user/types";
 
 const UserPage = () => {
+    const pageSize: number = 8;
     const [pageNum, setPage] = useState(1);
     const [queryParams, setQueryParams] = useState<{ username?: string; email?: string }>({});
     const [usernameInput, setUsernameInput] = useState('');
     const [emailInput, setEmailInput] = useState('');
     const serviceResponse = useService(() => UserService.list({
         page: pageNum,
-        page_size: 8, ...queryParams
+        page_size: pageSize, ...queryParams
     }), [pageNum, queryParams]);
     const {data, loading} = serviceResponse[0];
     const refresh = serviceResponse[1];
@@ -159,6 +160,7 @@ const UserPage = () => {
                         dataSource={data?.data}
                         bordered
                         pagination={{
+                            pageSize,
                             total: data?.total,
                             currentPage: pageNum,
                             className: 'px-4 mt-4',
